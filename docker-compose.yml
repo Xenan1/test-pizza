@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  app:
+    extends:
+      file: ./deploy/docker/docker-compose.common.yml
+      service: app_common
+    build:
+      context: ./project
+      dockerfile: ../deploy/docker/dockerfiles/App.Dockerfile
+    volumes:
+      - ./project:/var/www/html
+    extra_hosts:
+      - "${APP_DOMAIN}:host-gateway"
+
+  nginx:
+   extends:
+     file: ./deploy/docker/docker-compose.common.yml
+     service: nginx_common
+   volumes:
+     - ./deploy/nginx/vhost.conf:/etc/nginx/conf.d/default.conf:ro
+     - ./deploy/nginx/logs/:/var/log/nginx/
+     - ./project:/var/www/html
+   env_file:
+     - ./.env
+
+  pgdb:
+    extends:
+      file: ./deploy/docker/docker-compose.common.yml
+      service: pgdb_common
+    volumes:
+      - ${PG_DB_PATH}:/var/lib/postgresql/data/pgdata
+    env_file:
+      - ./.env
+
+  swagger:
+    extends:
+      file: ./deploy/docker/docker-compose.common.yml
+      service: swagger_common
+    volumes:
+      - ./documentation/openapi.yaml:/docs/openapi.yaml
+    env_file:
+      - ./.env
+
+networks:
+  pizza-network:
+    driver: bridge
