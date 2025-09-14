@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
         libfreetype6-dev \
         libjpeg62-turbo-dev libwebp-dev \
         libmcrypt-dev \
-        libpng-dev libzip4 \
+        libpng-dev \
         libzip-dev libonig-dev \
         zlib1g-dev libicu-dev g++ libmagickwand-dev --no-install-recommends  \
         libxml2-dev libxslt-dev \
