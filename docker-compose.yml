@@ -51,16 +51,6 @@ services:
     networks:
       - pizza-network
 
-  certbot:
-    image: certbot/certbot
-    container_name: certbot_pizza
-    volumes:
-      - ./deploy/nginx/ssl:/etc/letsencrypt
-      - ./project:/var/www/html
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 12h & wait $${!}; certbot renew --webroot -w /var/www/html --deploy-hook \"nginx -s reload\"; done;'"
-    networks:
-      - pizza-network
-
 networks:
   pizza-network:
     driver: bridge
