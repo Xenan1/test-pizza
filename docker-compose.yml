@@ -23,6 +23,7 @@ services:
      - ./deploy/nginx/vhost.conf:/etc/nginx/conf.d/default.conf:ro
      - ./deploy/nginx/logs/:/var/log/nginx/
      - ./project:/var/www/html
+     - ./deploy/nginx/ssl:/etc/nginx/ssl
    env_file:
      - ./.env
    networks:
@@ -47,6 +48,16 @@ services:
       - ./documentation/openapi.yaml:/docs/openapi.yaml
     env_file:
       - ./.env
+    networks:
+      - pizza-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot_pizza
+    volumes:
+      - ./deploy/nginx/ssl:/etc/letsencrypt
+      - ./project:/var/www/html
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 12h & wait $${!}; certbot renew --webroot -w /var/www/html --deploy-hook \"nginx -s reload\"; done;'"
     networks:
       - pizza-network
 
