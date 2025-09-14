@@ -328,7 +328,7 @@
                 '{{$image->url()}}',
             @endforeach
         ];
-        let currentImgIndex = {{$gallery[0]->id}};
+        let currentImgIndex = {{$gallery[0]->id ?? ''}};
 
         function openModal(id) {
             currentImgIndex = id;
