@@ -12,6 +12,8 @@ services:
       - ./project:/var/www/html
     extra_hosts:
       - "${APP_DOMAIN}:host-gateway"
+    networks:
+      - pizza-network
 
   nginx:
    extends:
@@ -23,6 +25,8 @@ services:
      - ./project:/var/www/html
    env_file:
      - ./.env
+   networks:
+     - pizza-network
 
   pgdb:
     extends:
@@ -32,6 +36,8 @@ services:
       - ${PG_DB_PATH}:/var/lib/postgresql/data/pgdata
     env_file:
       - ./.env
+    networks:
+      - pizza-network
 
   swagger:
     extends:
@@ -41,6 +47,8 @@ services:
       - ./documentation/openapi.yaml:/docs/openapi.yaml
     env_file:
       - ./.env
+    networks:
+      - pizza-network
 
 networks:
   pizza-network:
